@@ -1,4 +1,3 @@
-
 """""vundle"""""
 
 set rtp+=~/.vim/bundle/Vundle.vim/
@@ -17,7 +16,12 @@ let g:ctrlp_custom_ignore = '\v[\/](node_modules|dist)$'
 Bundle 'scrooloose/nerdtree'
 map <C-n> :NERDTreeToggle<CR>
 
-"Bundle 'mbbill/fencview'
+Bundle 'mbbill/fencview'
+Bundle 'vim-scripts/taglist.vim'
+Bundle 'a.vim'
+Bundle 'uarun/vim-protobuf'
+
+Bundle 'vim-airline/vim-airline'
 
 call vundle#end()
 filetype plugin indent on
@@ -25,16 +29,45 @@ filetype plugin indent on
 
 """""setting"""""
 
-syntax enable
 set background=dark
 colorscheme monokai
 
-set nu
-set ts=4
-set sw=4
-set st=4
-set hlsearch
-set incsearch
+" 不要使用vi的键盘模式，而是vim自己的 
+set nocompatible 
+" 显示命令提示
+set showcmd
+" 语言色彩
+syntax enable
+" 语法高亮 
+syntax on 
+" 去掉输入错误的提示声音 
+set noeb 
+" 在处理未保存或只读文件的时候，弹出确认 
+set confirm 
+" 自动缩进 
+set autoindent 
+" 使用c语言的缩进
+set cindent 
+" Tab键的宽度 
+set tabstop=4 
+" 统一缩进为4 
+set softtabstop=4 
+set shiftwidth=4 
+" 显示行号
+set number 
+" 历史记录数 
+set history=1000
+" 搜索忽略大小写 
+set ignorecase 
+" 搜索逐字符高亮 
+set hlsearch 
+" 忽略大小写搜索
+set incsearch 
+" 高亮显示匹配的括号
+set showmatch
+" 关闭遇到错误时的声音提示
+set noerrorbells
+
 
 """""encoding"""""
 
@@ -42,12 +75,12 @@ set incsearch
 
 """""map"""""
 
-let mapleader='\'
-
 map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
+
+let mapleader='\'
 
 map <leader>t :Tlist<cr>
 
@@ -70,7 +103,9 @@ let Tlist_Exit_OnlyWindow = 1
 
 " 保留上次打开的位置
 autocmd BufReadPost *
-    \ if line("'\"")>0&&line("'\"")<=line("$") |
-    \   exe "normal g'\"" |
-    \ endif
+        \ if line("'\"")>0&&line("'\"")<=line("$") |
+        \   exe "normal g'\"" |
+        \ endif
 
+autocmd BufNewFile,BufRead *.proto setfiletype proto
+autocmd FileType proto set expandtab

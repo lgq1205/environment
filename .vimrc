@@ -53,6 +53,10 @@ set tabstop=4
 " 统一缩进为4 
 set softtabstop=4 
 set shiftwidth=4 
+" tab转空格
+set expandtab
+" 删除空格=删除tab
+set sts=4
 " 显示行号
 set number 
 " 历史记录数 

@@ -55,6 +55,8 @@ set softtabstop=4
 set shiftwidth=4 
 " tab转空格
 set expandtab
+" 空格转tab     
+"set noexpandtab
 " 删除空格=删除tab
 set sts=4
 " 显示行号
@@ -87,6 +89,11 @@ map <C-l> <C-w>l
 let mapleader='\'
 
 map <leader>t :Tlist<cr>
+
+"删除行尾空格
+map <leader>d :%s/\s\+$//<cr>
+
+set pastetoggle=<F3>
 
 
 """""plugin"""""

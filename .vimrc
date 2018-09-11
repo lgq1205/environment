@@ -1,79 +1,90 @@
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 """""vundle"""""
 
-set rtp+=~/.vim/bundle/Vundle.vim/
-call vundle#begin()
+call plug#begin('~/.vim/plugged')
 
-Plugin 'gmarik/Vundle.vim'
+Plug 'sickill/vim-monokai'
 
-Bundle 'sickill/vim-monokai'
-Bundle 'tomasr/molokai'
-
-Bundle 'kien/ctrlp.vim'
+Plug 'kien/ctrlp.vim'
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|dist)$'
 
-Bundle 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdtree'
 map <C-n> :NERDTreeToggle<CR>
 
-Bundle 'mbbill/fencview'
-Bundle 'vim-scripts/taglist.vim'
-Bundle 'a.vim'
-Bundle 'uarun/vim-protobuf'
+Plug 'mbbill/fencview'
+Plug 'vim-scripts/taglist.vim'
+Plug 'vim-scripts/a.vim'
+Plug 'uarun/vim-protobuf'
 
-Bundle 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline'
+Plug 'scrooloose/nerdcommenter'
 
-call vundle#end()
+call plug#end()
+
 filetype plugin indent on
 
 
 """""setting"""""
 
-set background=dark
+"set background=dark
 colorscheme monokai
+"set term=screen
 
-" 不要使用vi的键盘模式，而是vim自己的 
-set nocompatible 
+" 不要使用vi的键盘模式，而是vim自己的
+set nocompatible
 " 显示命令提示
 set showcmd
 " 语言色彩
 syntax enable
-" 语法高亮 
-syntax on 
-" 去掉输入错误的提示声音 
-set noeb 
-" 在处理未保存或只读文件的时候，弹出确认 
-set confirm 
-" 自动缩进 
-set autoindent 
+" 语法高亮
+syntax on
+" 去掉输入错误的提示声音
+set noeb
+" 在处理未保存或只读文件的时候，弹出确认
+set confirm
+" 自动缩进
+set autoindent
 " 使用c语言的缩进
-set cindent 
-" Tab键的宽度 
-set tabstop=4 
-" 统一缩进为4 
-set softtabstop=4 
-set shiftwidth=4 
+set cindent
+" Tab键的宽度
+set tabstop=4
+" 统一缩进为4
+set softtabstop=4
+set shiftwidth=4
 " tab转空格
 set expandtab
-" 空格转tab     
+" 空格转tab
 "set noexpandtab
 " 删除空格=删除tab
 set sts=4
 " 显示行号
-set number 
-" 历史记录数 
+set number
+" 历史记录数
 set history=1000
-" 搜索忽略大小写 
-set ignorecase 
-" 搜索逐字符高亮 
-set hlsearch 
+" 搜索忽略大小写
+set ignorecase
+" 搜索逐字符高亮
+set hlsearch
 " 忽略大小写搜索
-set incsearch 
+set incsearch
 " 高亮显示匹配的括号
 set showmatch
 " 关闭遇到错误时的声音提示
 set noerrorbells
-
+" 显示tab和末尾空格
+set listchars=tab:>-,trail:-
+"set list
+"关闭错误提示音
+set noerrorbells
+"错误闪烁代替响铃
+"set visualbell
 
 """""encoding"""""
 
@@ -90,7 +101,6 @@ let mapleader='\'
 
 map <leader>t :Tlist<cr>
 
-"删除行尾空格
 map <leader>d :%s/\s\+$//<cr>
 
 set pastetoggle=<F3>
@@ -112,6 +122,9 @@ let Tlist_Exit_OnlyWindow = 1
 "let Tlist_WinWidth=30
 
 
+""""""""""""ag""""""""
+let g:ag_prg="ag --column"
+
 " 保留上次打开的位置
 autocmd BufReadPost *
         \ if line("'\"")>0&&line("'\"")<=line("$") |
@@ -120,3 +133,67 @@ autocmd BufReadPost *
 
 autocmd BufNewFile,BufRead *.proto setfiletype proto
 autocmd FileType proto set expandtab
+
+
+""""""""""""""show func"""""""""""""""
+autocmd BufNewFile,BufRead * :syntax match cfunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>[^()]*)("me=e-2
+autocmd BufNewFile,BufRead * :syntax match cfunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>\s*("me=e-1
+
+hi cfunctions ctermfg=81
+
+""""""""""""""add author""""""""""""""
+map <F4> ms:call AddAuthor()<cr>'S
+
+function AddAuthor()
+    let n=1
+    while n < 11
+        let line = getline(n)
+        if line=~'[#]*\s*\*\s*\S*Last\s*modified\s*:\s*\S*.*$'
+        call UpdateTitle()
+        return
+    endif
+    let n = n + 1
+    endwhile
+    if &filetype == 'sh'
+        call AddTitleForShell()
+    elseif &filetype == 'python'
+        call AddTitleForPython()
+    else
+        call AddTitleForC()
+    endif
+
+endfunction
+
+
+function UpdateTitle()
+    normal m'
+    execute '/* Last modified\s*:/s@:.*$@\=strftime(": %Y-%m-%d %H:%M")@'
+    normal mk
+    execute '/* Filename\s*:/s@:.*$@\=": ".expand("%:t")@'
+    execute "noh"
+    normal 'k
+    echohl WarningMsg | echo "Successful in updating the copy right." |echohl None
+endfunction
+
+function AddTitleForC()
+    call append(0,"/**********************************************************")
+    call append(1," * Author        : vinceliang")
+    call append(2," * Email         : liangguoqiu@gmail.com")
+    call append(3," * Create time   : ".strftime("%Y-%m-%d %H:%M"))
+    call append(4," * Last modified : ".strftime("%Y-%m-%d %H:%M"))
+    call append(5," * Filename      : ".expand("%:t"))
+    call append(6," * Description   : ")
+    call append(7," * *******************************************************/")
+    call append(8,"")
+    echohl WarningMsg | echo "Successful in adding the copyright." | echohl None
+endfunction
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+iab mer MMERR( "ERR:");<Left><Left><Left>
+iab der MMDEBUG( "ERR:");<Left><Left><Left>
+iab rer RETURN_ON_ERROR(logger, iRet, "", iRet);<Esc>10<Left>
+iab mlg MMBIZFuncLogHelper logger(__func__, );<CR>
+iab llg MMBIZFuncLogHelper& logger = MMBIZFuncLogHelper::LastObj();<CR>
+iab ber MMBIZERR(logger, " fail! iRet= %d", iRet);<Esc>25<Left>
+iab pu64 " PRIu64 "<Left><Esc>

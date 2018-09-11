@@ -144,6 +144,10 @@ hi cfunctions ctermfg=81
 """"""""""""""add author""""""""""""""
 map <F4> ms:call AddAuthor()<cr>'S
 
+""""""""""""""NERDTree""""""""""""""
+" 自动关闭最后一个窗口
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
 function AddAuthor()
     let n=1
     while n < 11

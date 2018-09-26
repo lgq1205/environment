@@ -1,0 +1,18 @@
+{
+	"color_scheme": "Packages/Color Scheme - Default/Monokai.sublime-color-scheme",
+	"ignored_packages":
+	[
+	],
+	"theme": "Monokai+.sublime-theme",
+	"vintage_ctrl_keys": true,
+	"vintage_start_in_command_mode": true,
+	"vintageous_use_ctrl_keys": true
+}
+
+
+/*
+ mac sublime text 3 开启连续按hjkl
+ mac terminal/iterm2 终端输入：
+    defaults write com.sublimetext.3 ApplePressAndHoldEnabled -bool false
+ */
+

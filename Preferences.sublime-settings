@@ -13,6 +13,9 @@
 /*
  mac sublime text 3 开启连续按hjkl
  mac terminal/iterm2 终端输入：
+    修改sublime3：
     defaults write com.sublimetext.3 ApplePressAndHoldEnabled -bool false
+    全局修改：
+    defaults write -g ApplePressAndHoldEnabled -bool false
  */
 

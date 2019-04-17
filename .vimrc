@@ -1,3 +1,17 @@
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+"""""vundle"""""
+
+call plug#begin('~/.vim/plugged')
+
+Plug 'sickill/vim-monokai'
+
+"Plug 'vim-scripts/taglist.vim'
+"Plug 'kien/ctrlp.vim'
 "set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 "let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 "let g:ctrlp_custom_ignore = '\v[\/](node_modules|dist)$'

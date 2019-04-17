@@ -1,30 +1,25 @@
-if empty(glob('~/.vim/autoload/plug.vim'))
-  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-"""""vundle"""""
-
-call plug#begin('~/.vim/plugged')
-
-Plug 'sickill/vim-monokai'
-
-Plug 'kien/ctrlp.vim'
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
-let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-let g:ctrlp_custom_ignore = '\v[\/](node_modules|dist)$'
+"set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
+"let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+"let g:ctrlp_custom_ignore = '\v[\/](node_modules|dist)$'
 
 Plug 'scrooloose/nerdtree'
 map <C-n> :NERDTreeToggle<CR>
 
-Plug 'mbbill/fencview'
-Plug 'vim-scripts/taglist.vim'
+" 自动识别文件的编码格式
+"Plug 'mbbill/fencview'
 Plug 'vim-scripts/a.vim'
+" protobuf格式高亮
 Plug 'uarun/vim-protobuf'
 
+" 状态栏
 Plug 'vim-airline/vim-airline'
+" 快速注释
 Plug 'scrooloose/nerdcommenter'
+" 快速搜索
+"Plug 'mileszs/ack.vim'
+" 文件/函数名/搜索
+Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
+let g:Lf_ShortcutF = '<C-P>'
 
 call plug#end()
 
@@ -64,10 +59,12 @@ set expandtab
 "set noexpandtab
 " 删除空格=删除tab
 set sts=4
+" 显示相对行号
+set rnu
 " 显示行号
-set number
+set nu
 " 历史记录数
-set history=1000
+set history=10000
 " 搜索忽略大小写
 set ignorecase
 " 搜索逐字符高亮
@@ -88,18 +85,19 @@ set noerrorbells
 
 """""encoding"""""
 
-"set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
+set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 
 """""map"""""
 
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
+"map <C-h> <C-w>h
+"map <C-j> <C-w>j
+"map <C-k> <C-w>k
+"map <C-l> <C-w>l
 
 let mapleader='\'
 
-map <leader>t :Tlist<cr>
+"map <leader>t :Tlist<cr>
+map <leader>t :LeaderfFunction<cr>
 
 map <leader>d :%s/\s\+$//<cr>
 
@@ -114,16 +112,19 @@ set pastetoggle=<F3>
 " 不同时显示多个文件的tag，只显示当前文件的
 "let Tlist_Show_One_File = 1
 " 如果taglist窗口是最后一个窗口，则退出vim
-let Tlist_Exit_OnlyWindow = 1
+"let Tlist_Exit_OnlyWindow = 1
 " 在右侧窗口中显示taglist窗口
 "let Tlist_Use_Right_Window = 1
 " 自动打开Tlist
 "let Tlist_Auto_Open = 1
-"let Tlist_WinWidth=30
-
+"let Tlist_WinWidth=40
 
 """"""""""""ag""""""""
-let g:ag_prg="ag --column"
+"let g:ag_prg="ag --column"
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+
 
 " 保留上次打开的位置
 autocmd BufReadPost *
@@ -148,6 +149,11 @@ map <F4> ms:call AddAuthor()<cr>'S
 " 自动关闭最后一个窗口
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
+" Author {{{
+
+" 自动添加注释头
+autocmd BufNewFile *.[ch],*.hpp,*.cpp,Makefile,*.mk,*.sh exec ":call AddAuthor()"
+
 function AddAuthor()
     let n=1
     while n < 11
@@ -167,7 +173,6 @@ function AddAuthor()
     endif
 
 endfunction
-
 
 function UpdateTitle()
     normal m'
@@ -192,12 +197,16 @@ function AddTitleForC()
     echohl WarningMsg | echo "Successful in adding the copyright." | echohl None
 endfunction
 
+" }}}
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 iab mer MMERR( "ERR:");<Left><Left><Left>
 iab der MMDEBUG( "ERR:");<Left><Left><Left>
-iab rer RETURN_ON_ERROR(logger, iRet, "", iRet);<Esc>10<Left>
-iab mlg MMBIZFuncLogHelper logger(__func__, );<CR>
+iab rer RETURN_ON_ERROR( logger, iRet, "", iRet );<Esc>11<Left>
+iab mlg MMBIZFuncLogHelper logger( __func__, );<Esc>2<Left>
+iab irt int iRet = 0;<CR>return iRet;
 iab llg MMBIZFuncLogHelper& logger = MMBIZFuncLogHelper::LastObj();<CR>
-iab ber MMBIZERR(logger, " fail! iRet= %d", iRet);<Esc>25<Left>
+iab ber MMBIZERR( logger, "ERR: ret %d", iRet );<Esc>16<Left>
 iab pu64 " PRIu64 "<Left><Esc>
+iab roe RETURN_ON_ERROR( logger, 0 != iRet, "", iRet );<Esc>11<Left>

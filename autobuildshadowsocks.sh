@@ -3,7 +3,7 @@ apt-get install python-m2crypto
 pip install shadowsocks
 
 sudo vim /home/ubuntu/.local/lib/python2.7/site-packages/shadowsocks/crypto/openssl.py
-%s/cleanup/reset/g    in vim
+%s/cleanup/reset/g
 
 vim /etc/shadowsocks.json
 {
@@ -15,3 +15,6 @@ vim /etc/shadowsocks.json
     "timeout":800,
     "method":"aes-256-cfb"
 }
+
+sudo vim /etc/rc.local
+/usr/bin/python /usr/local/bin/ssserver -c /etc/shadowsocks.json

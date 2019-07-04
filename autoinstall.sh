@@ -27,3 +27,4 @@ git clone https://github.com/lgq1205/environment/blob/master/.tmux.conf ~/.tmux.
 $ sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
 
+

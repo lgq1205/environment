@@ -17,25 +17,38 @@ Plug 'sickill/vim-monokai'
 "let g:ctrlp_custom_ignore = '\v[\/](node_modules|dist)$'
 
 Plug 'scrooloose/nerdtree'
-map <C-n> :NERDTreeToggle<CR>
 
 " 自动识别文件的编码格式
 "Plug 'mbbill/fencview'
 Plug 'vim-scripts/a.vim'
-" protobuf格式高亮
+"protobuf格式高亮
 Plug 'uarun/vim-protobuf'
 
-" 状态栏
+"状态栏
 Plug 'vim-airline/vim-airline'
-" 快速注释
+"快速注释
 Plug 'scrooloose/nerdcommenter'
-" 快速搜索
+"快速搜索
 "Plug 'mileszs/ack.vim'
-" 文件/函数名/搜索
+"文件/函数名/搜索
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
-let g:Lf_ShortcutF = '<C-P>'
+
+"vim本地diff
+Plug 'mhinz/vim-signify'
+"vim 内嵌svn命令
+Plug 'vim-scripts/vcscommand.vim'
+
+if has('nvim')
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
+endif
+let g:deoplete#enable_at_startup = 1
 
 call plug#end()
+
 
 filetype plugin indent on
 
@@ -108,15 +121,24 @@ set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 "map <C-k> <C-w>k
 "map <C-l> <C-w>l
 
-let mapleader='\'
+let mapleader=','
 
 "map <leader>t :Tlist<cr>
 map <leader>t :LeaderfFunction<cr>
+map <leader>n :NERDTreeToggle<CR>
+"map <leader>f :LeaderfFile<cr> " default is leader + f
+"map <leader>d :%s/\s\+$//<cr>
+"set pastetoggle=<F3>
 
-map <leader>d :%s/\s\+$//<cr>
-
-set pastetoggle=<F3>
-
+"noremap <c-n> :NERDTreeToggle<CR>
+"noremap <c-p> :LeaderfFile<cr>
+"noremap <c-m> :LeaderfFunction<cr>
+"
+"let g:Lf_WindowPosition='left' " 'fullScreen', 'top', 'bottom', 'left', 'right'
+let g:Lf_WildIgnore = {
+        \ 'dir': ['.svn','.git','.hg'],
+        \ 'file': ['s[km]_*','*.sw?','~$*','*.bak','*.exe','*.o','*.so','*.py[co]']
+        \}
 
 """""plugin"""""
 
@@ -131,13 +153,15 @@ set pastetoggle=<F3>
 "let Tlist_Use_Right_Window = 1
 " 自动打开Tlist
 "let Tlist_Auto_Open = 1
-"let Tlist_WinWidth=40
+"let Tlist_WinWidth=50
+
+"let g:airline#extensions#tagbar#flags = 'f'  " show full tag hierarchy
 
 """"""""""""ag""""""""
 "let g:ag_prg="ag --column"
-if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
-endif
+"if executable('ag')
+"  let g:ackprg = 'ag --vimgrep'
+"endif
 
 
 " 保留上次打开的位置

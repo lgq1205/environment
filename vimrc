@@ -10,7 +10,8 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'sickill/vim-monokai'
 
-"Plug 'vim-scripts/taglist.vim'
+Plug 'vim-scripts/taglist.vim'
+
 "Plug 'kien/ctrlp.vim'
 "set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
 "let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
@@ -29,7 +30,7 @@ Plug 'vim-airline/vim-airline'
 "快速注释
 Plug 'scrooloose/nerdcommenter'
 "快速搜索
-"Plug 'mileszs/ack.vim'
+Plug 'mileszs/ack.vim'
 "文件/函数名/搜索
 Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 
@@ -37,6 +38,13 @@ Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 Plug 'mhinz/vim-signify'
 "vim 内嵌svn命令
 Plug 'vim-scripts/vcscommand.vim'
+
+"Plug 'Shougo/neocomplete.vim'
+"let g:neocomplete#enable_at_startup = 1
+
+if has('nvim')
+    let g:python3_host_prog = '/usr/local/bin/python3'
+endif
 
 if has('nvim')
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -47,8 +55,10 @@ else
 endif
 let g:deoplete#enable_at_startup = 1
 
-call plug#end()
+Plug 'Shougo/deoplete-clangx'
+Plug 'Shougo/neoinclude.vim'
 
+call plug#end()
 
 filetype plugin indent on
 
@@ -87,7 +97,7 @@ set expandtab
 " 删除空格=删除tab
 set sts=4
 " 显示相对行号
-set rnu
+"set rnu
 " 显示行号
 set nu
 " 历史记录数
@@ -146,23 +156,55 @@ let g:Lf_WildIgnore = {
 " Tag list (ctags)
 """"""""""""""""""""""""""""""
 " 不同时显示多个文件的tag，只显示当前文件的
-"let Tlist_Show_One_File = 1
+let Tlist_Show_One_File = 1
 " 如果taglist窗口是最后一个窗口，则退出vim
-"let Tlist_Exit_OnlyWindow = 1
+let Tlist_Exit_OnlyWindow = 1
 " 在右侧窗口中显示taglist窗口
-"let Tlist_Use_Right_Window = 1
+let Tlist_Use_Right_Window = 1
 " 自动打开Tlist
 "let Tlist_Auto_Open = 1
 "let Tlist_WinWidth=50
 
-"let g:airline#extensions#tagbar#flags = 'f'  " show full tag hierarchy
-
 """"""""""""ag""""""""
-"let g:ag_prg="ag --column"
-"if executable('ag')
-"  let g:ackprg = 'ag --vimgrep'
-"endif
+let g:ag_prg="ag --column"
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+cnoreabbrev Ack Ack!
+nnoremap <Leader>a :Ack!<Space>
 
+""""""""""" deoplete """""""""""""""
+if !has('nvim')
+    set pyxversion=3
+endif
+" Change clang binary path
+call deoplete#custom#var('clangx', 'clang_binary', '/usr/bin/clang')
+
+" Change clang options
+call deoplete#custom#var('clangx', 'default_c_options', '')
+call deoplete#custom#var('clangx', 'default_cpp_options', '')
+
+""""""""""" neocomplete begin """"""""""""""
+" Disable AutoComplPop.
+"let g:acp_enableAtStartup = 0
+" Use neocomplete.
+"let g:neocomplete#enable_at_startup = 1
+" Use smartcase.
+"let g:neocomplete#enable_smart_case = 1
+" Set minimum syntax keyword length.
+"let g:neocomplete#sources#syntax#min_keyword_length = 3
+
+" Plugin key-mappings.
+"inoremap <expr><C-g>     neocomplete#undo_completion()
+"inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+" <TAB>: completion.
+"inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+"inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+"inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+
+"""""""""" neocomplete end """"""""""""""""""""'
 
 " 保留上次打开的位置
 autocmd BufReadPost *

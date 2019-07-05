@@ -293,3 +293,4 @@ iab llg MMBIZFuncLogHelper& logger = MMBIZFuncLogHelper::LastObj();<CR>
 iab ber MMBIZERR( logger, "ERR: ret %d", iRet );<Esc>16<Left>
 iab pu64 " PRIu64 "<Left><Esc>
 iab roe RETURN_ON_ERROR( logger, 0 != iRet, "", iRet );<Esc>11<Left>
+

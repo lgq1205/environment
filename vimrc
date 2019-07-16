@@ -39,24 +39,24 @@ Plug 'mhinz/vim-signify'
 "vim 内嵌svn命令
 Plug 'vim-scripts/vcscommand.vim'
 
-"Plug 'Shougo/neocomplete.vim'
-"let g:neocomplete#enable_at_startup = 1
+Plug 'Shougo/neocomplete.vim'
+let g:neocomplete#enable_at_startup = 1
 
-if has('nvim')
-    let g:python3_host_prog = '/usr/local/bin/python3'
-endif
+"if has('nvim')
+"    let g:python3_host_prog = '/usr/local/bin/python3'
+"endif
 
-if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-    Plug 'Shougo/deoplete.nvim'
-    Plug 'roxma/nvim-yarp'
-    Plug 'roxma/vim-hug-neovim-rpc'
-endif
-let g:deoplete#enable_at_startup = 1
+"if has('nvim')
+    "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+"else
+    "Plug 'Shougo/deoplete.nvim'
+    "Plug 'roxma/nvim-yarp'
+    "Plug 'roxma/vim-hug-neovim-rpc'
+"endif
+"let g:deoplete#enable_at_startup = 1
 
-Plug 'Shougo/deoplete-clangx'
-Plug 'Shougo/neoinclude.vim'
+"Plug 'Shougo/deoplete-clangx'
+"Plug 'Shougo/neoinclude.vim'
 
 call plug#end()
 
@@ -174,17 +174,17 @@ cnoreabbrev Ack Ack!
 nnoremap <Leader>a :Ack!<Space>
 
 """"""""""" deoplete """""""""""""""
-if !has('nvim')
-    set pyxversion=3
-endif
+"if !has('nvim')
+    "set pyxversion=3
+"endif
 " Change clang binary path
-call deoplete#custom#var('clangx', 'clang_binary', '/usr/bin/clang')
+"call deoplete#custom#var('clangx', 'clang_binary', '/usr/bin/clang')
 
 " Change clang options
-call deoplete#custom#var('clangx', 'default_c_options', '')
-call deoplete#custom#var('clangx', 'default_cpp_options', '')
+"call deoplete#custom#var('clangx', 'default_c_options', '')
+"call deoplete#custom#var('clangx', 'default_cpp_options', '')
 "自动关闭preview
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
+"autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
 "set splitbelow 
 
 """"""""""" neocomplete begin """"""""""""""

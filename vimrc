@@ -38,25 +38,25 @@ Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 Plug 'mhinz/vim-signify'
 "vim 内嵌svn命令
 Plug 'vim-scripts/vcscommand.vim'
+" 补全
+Plug 'zxqfl/tabnine-vim'
 
 "Plug 'Shougo/neocomplete.vim'
-"let g:neocomplete#enable_at_startup = 1
 
 if has('nvim')
     let g:python3_host_prog = '/usr/local/bin/python3'
 endif
 
-if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-    Plug 'Shougo/deoplete.nvim'
-    Plug 'roxma/nvim-yarp'
-    Plug 'roxma/vim-hug-neovim-rpc'
-endif
-let g:deoplete#enable_at_startup = 1
+"if has('nvim')
+    "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+"else
+    "Plug 'Shougo/deoplete.nvim'
+    "Plug 'roxma/nvim-yarp'
+    "Plug 'roxma/vim-hug-neovim-rpc'
+"endif
 
-Plug 'Shougo/deoplete-clangx'
-Plug 'Shougo/neoinclude.vim'
+"Plug 'Shougo/deoplete-clangx'
+"Plug 'Shougo/neoinclude.vim'
 
 call plug#end()
 
@@ -174,20 +174,26 @@ cnoreabbrev Ack Ack!
 nnoremap <Leader>a :Ack!<Space>
 
 """"""""""" deoplete """""""""""""""
-if !has('nvim')
-    set pyxversion=3
-endif
+"if !has('nvim')
+    "set pyxversion=3
+"endif
 " Change clang binary path
-call deoplete#custom#var('clangx', 'clang_binary', '/usr/bin/clang')
+"call deoplete#custom#var('clangx', 'clang_binary', '/usr/bin/clang')
 
 " Change clang options
-call deoplete#custom#var('clangx', 'default_c_options', '')
-call deoplete#custom#var('clangx', 'default_cpp_options', '')
-"自动关闭preview
-autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
+"call deoplete#custom#var('clangx', 'default_c_options', '')
+"call deoplete#custom#var('clangx', 'default_cpp_options', '')
+" 自动关闭preview
+"autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
+"autocmd InsertLeave,CompleteDone * silent! pclose
 "set splitbelow 
+"let g:deoplete#enable_at_startup = 1
+"let g:deoplete#auto_completion_start_length = 1
+"let g:deoplete#enable_smart_case = 1
+"inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 
 """"""""""" neocomplete begin """"""""""""""
+"let g:neocomplete#enable_at_startup = 1
 " Disable AutoComplPop.
 "let g:acp_enableAtStartup = 0
 " Use neocomplete.
@@ -220,10 +226,10 @@ autocmd FileType proto set expandtab
 
 
 """"""""""""""show func"""""""""""""""
-autocmd BufNewFile,BufRead * :syntax match cfunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>[^()]*)("me=e-2
-autocmd BufNewFile,BufRead * :syntax match cfunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>\s*("me=e-1
+"autocmd BufNewFile,BufRead * :syntax match cfunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>[^()]*)("me=e-2
+"autocmd BufNewFile,BufRead * :syntax match cfunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>\s*("me=e-1
 
-hi cfunctions ctermfg=81
+"hi cfunctions ctermfg=81
 
 """"""""""""""add author""""""""""""""
 map <F4> ms:call AddAuthor()<cr>'S

@@ -40,32 +40,12 @@ Plug 'mhinz/vim-signify'
 Plug 'vim-scripts/vcscommand.vim'
 " 补全
 Plug 'zxqfl/tabnine-vim'
-
-<<<<<<< HEAD
+" 补全
 "Plug 'Shougo/neocomplete.vim'
-=======
-Plug 'Shougo/neocomplete.vim'
-let g:neocomplete#enable_at_startup = 1
->>>>>>> affcc4ac5de7782e3d402aa3093948c193690dd8
 
-"if has('nvim')
-"    let g:python3_host_prog = '/usr/local/bin/python3'
-"endif
-
-"if has('nvim')
-    "Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-"else
-    "Plug 'Shougo/deoplete.nvim'
-    "Plug 'roxma/nvim-yarp'
-    "Plug 'roxma/vim-hug-neovim-rpc'
-"endif
-<<<<<<< HEAD
-=======
-"let g:deoplete#enable_at_startup = 1
->>>>>>> affcc4ac5de7782e3d402aa3093948c193690dd8
-
-"Plug 'Shougo/deoplete-clangx'
-"Plug 'Shougo/neoinclude.vim'
+if has('nvim')
+    let g:python3_host_prog = '/usr/local/bin/python3'
+endif
 
 call plug#end()
 
@@ -182,32 +162,7 @@ endif
 cnoreabbrev Ack Ack!
 nnoremap <Leader>a :Ack!<Space>
 
-""""""""""" deoplete """""""""""""""
-"if !has('nvim')
-    "set pyxversion=3
-"endif
-" Change clang binary path
-"call deoplete#custom#var('clangx', 'clang_binary', '/usr/bin/clang')
-
-" Change clang options
-"call deoplete#custom#var('clangx', 'default_c_options', '')
-"call deoplete#custom#var('clangx', 'default_cpp_options', '')
-<<<<<<< HEAD
-" 自动关闭preview
-"autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
-"autocmd InsertLeave,CompleteDone * silent! pclose
-=======
-"自动关闭preview
-"autocmd InsertLeave,CompleteDone * if pumvisible() == 0 | silent! pclose | endif
->>>>>>> affcc4ac5de7782e3d402aa3093948c193690dd8
-"set splitbelow 
-"let g:deoplete#enable_at_startup = 1
-"let g:deoplete#auto_completion_start_length = 1
-"let g:deoplete#enable_smart_case = 1
-"inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-
 """"""""""" neocomplete begin """"""""""""""
-"let g:neocomplete#enable_at_startup = 1
 " Disable AutoComplPop.
 "let g:acp_enableAtStartup = 0
 " Use neocomplete.
@@ -255,7 +210,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " Author {{{
 
 " 自动添加注释头
-autocmd BufNewFile *.[ch],*.hpp,*.cpp,Makefile,*.mk,*.sh exec ":call AddAuthor()"
+autocmd BufNewFile *.[ch],*.hpp,*.cpp exec ":call AddAuthor()"
 
 function AddAuthor()
     let n=1

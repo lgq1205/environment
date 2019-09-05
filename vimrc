@@ -12,11 +12,7 @@ Plug 'sickill/vim-monokai'
 
 Plug 'vim-scripts/taglist.vim'
 
-"Plug 'kien/ctrlp.vim'
-"set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
-"let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-"let g:ctrlp_custom_ignore = '\v[\/](node_modules|dist)$'
-
+Plug 'kien/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
 
 " 自动识别文件的编码格式
@@ -38,10 +34,14 @@ Plug 'Yggdroot/LeaderF', { 'do': './install.sh' }
 Plug 'mhinz/vim-signify'
 "vim 内嵌svn命令
 Plug 'vim-scripts/vcscommand.vim'
-" 补全
-Plug 'zxqfl/tabnine-vim'
-" 补全
-"Plug 'Shougo/neocomplete.vim'
+" clang-format 格式化代码，需要配合安装clang-format 
+Plug 'rhysd/vim-clang-format'
+"  
+Plug 'kana/vim-operator-user'
+
+Plug 'mbbill/echofunc'
+
+
 
 if has('nvim')
     let g:python3_host_prog = '/usr/local/bin/python3'
@@ -52,8 +52,9 @@ call plug#end()
 filetype plugin indent on
 
 
+"""""""""""""""""
 """""setting"""""
-
+"""""""""""""""""
 "set background=dark
 colorscheme monokai
 "set term=screen
@@ -75,16 +76,16 @@ set autoindent
 " 使用c语言的缩进
 set cindent
 " Tab键的宽度
-set tabstop=4
-" 统一缩进为4
-set softtabstop=4
-set shiftwidth=4
+set tabstop=2
+" 统一缩进
+set softtabstop=2
+set shiftwidth=2
 " tab转空格
 set expandtab
 " 空格转tab
 "set noexpandtab
 " 删除空格=删除tab
-set sts=4
+"set sts=4
 " 显示相对行号
 "set rnu
 " 显示行号
@@ -108,13 +109,20 @@ set listchars=tab:>-,trail:-
 set noerrorbells
 "错误闪烁代替响铃
 "set visualbell
+set colorcolumn=121
 
+
+
+""""""""""""""""""
 """""encoding"""""
-
+""""""""""""""""""
 set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 
-"""""map"""""
 
+
+"""""""""""""
+"""""map"""""
+"""""""""""""
 "map <C-h> <C-w>h
 "map <C-j> <C-w>j
 "map <C-k> <C-w>k
@@ -124,25 +132,71 @@ let mapleader=','
 
 "map <leader>t :Tlist<cr>
 map <leader>t :LeaderfFunction<cr>
-map <leader>n :NERDTreeToggle<CR>
+"map <leader>n :NERDTreeToggle<CR>
 "map <leader>f :LeaderfFile<cr> " default is leader + f
 "map <leader>d :%s/\s\+$//<cr>
 "set pastetoggle=<F3>
 
-"noremap <c-n> :NERDTreeToggle<CR>
+noremap <c-n> :NERDTreeToggle<CR>
 "noremap <c-p> :LeaderfFile<cr>
 "noremap <c-m> :LeaderfFunction<cr>
-"
+
+
+
+
+""""""""""""""""""""""""""""""""""
+""""""""" LeaderF """"""""""""""""
+""""""""""""""""""""""""""""""""""
 "let g:Lf_WindowPosition='left' " 'fullScreen', 'top', 'bottom', 'left', 'right'
 let g:Lf_WildIgnore = {
         \ 'dir': ['.svn','.git','.hg'],
         \ 'file': ['s[km]_*','*.sw?','~$*','*.bak','*.exe','*.o','*.so','*.py[co]']
         \}
 
-"""""plugin"""""
+
+
+
+
+"""""""""""""""""
+""""" ctrlp """""
+"""""""""""""""""
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " MacOSX/Linux
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = '\v[\/](node_modules|dist)$'
+
+
+
+
+
+""""""""""""""""""""""""
+""""" clang-format """""
+""""""""""""""""""""""""
+"base style. llvm, google, chromium, mozilla is supported
+let g:clang_format#code_style = "google"
+"When this variable's value is 1, vim-clang-format automatically detects the style file like .clang-format or _clang-format and applies the style to formatting.
+let g:clang_format#detect_style_file = 1
+"When the value is 1, a current buffer is automatically formatted on saving the buffer. Formatting is executed on BufWritePre event.
+"let g:clang_format#auto_format = 1
+"When the value is 1, inserted lines are automatically formatted on leaving insert mode. Formatting is executed on InsertLeave event.
+"let g:clang_format#auto_format_on_insert_leave = 1
+
+let g:clang_format#style_options = {
+      \ "ColumnLimit": 120,
+      \ "AlignAfterOpenBracket": "AlwaysBreak",
+      \ "BinPackParameters": "false",
+      \ "AllowAllParametersOfDeclarationOnNextLine": "false",
+      \ "AllowShortFunctionsOnASingleLine": "false"}
+
+" map to <Leader>cf
+autocmd FileType c,cpp,objc,proto nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+autocmd FileType c,cpp,objc,proto vnoremap <buffer><Leader>cf :ClangFormat<CR>
+
+
+
+
 
 """"""""""""""""""""""""""""""
-" Tag list (ctags)
+""""" Tag list (ctags) """""""
 """"""""""""""""""""""""""""""
 " 不同时显示多个文件的tag，只显示当前文件的
 let Tlist_Show_One_File = 1
@@ -154,7 +208,13 @@ let Tlist_Use_Right_Window = 1
 "let Tlist_Auto_Open = 1
 "let Tlist_WinWidth=50
 
-""""""""""""ag""""""""
+
+
+
+
+""""""""""""""
+""""" ag """""
+""""""""""""""
 let g:ag_prg="ag --column"
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
@@ -162,28 +222,14 @@ endif
 cnoreabbrev Ack Ack!
 nnoremap <Leader>a :Ack!<Space>
 
-""""""""""" neocomplete begin """"""""""""""
-" Disable AutoComplPop.
-"let g:acp_enableAtStartup = 0
-" Use neocomplete.
-"let g:neocomplete#enable_at_startup = 1
-" Use smartcase.
-"let g:neocomplete#enable_smart_case = 1
-" Set minimum syntax keyword length.
-"let g:neocomplete#sources#syntax#min_keyword_length = 3
 
-" Plugin key-mappings.
-"inoremap <expr><C-g>     neocomplete#undo_completion()
-"inoremap <expr><C-l>     neocomplete#complete_common_string()
 
-" <TAB>: completion.
-"inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" <C-h>, <BS>: close popup and delete backword char.
-"inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-"inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
 
-"""""""""" neocomplete end """"""""""""""""""""'
 
+
+""""""""""""""""""
+""""" autocmd """"
+""""""""""""""""""
 " 保留上次打开的位置
 autocmd BufReadPost *
         \ if line("'\"")>0&&line("'\"")<=line("$") |
@@ -193,23 +239,28 @@ autocmd BufReadPost *
 autocmd BufNewFile,BufRead *.proto setfiletype proto
 autocmd FileType proto set expandtab
 
+" 绑定=号格式化 
+autocmd FileType c,cpp,objc,proto map <buffer> = <Plug>(operator-clang-format)
 
-""""""""""""""show func"""""""""""""""
-"autocmd BufNewFile,BufRead * :syntax match cfunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>[^()]*)("me=e-2
-"autocmd BufNewFile,BufRead * :syntax match cfunctions "\<[a-zA-Z_][a-zA-Z_0-9]*\>\s*("me=e-1
 
-"hi cfunctions ctermfg=81
 
-""""""""""""""add author""""""""""""""
-map <F4> ms:call AddAuthor()<cr>'S
 
-""""""""""""""NERDTree""""""""""""""
+
+"""""""""""""""""""""""""""""
+""""""""" NERDTree """"""""""
+"""""""""""""""""""""""""""""
 " 自动关闭最后一个窗口
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
-" Author {{{
 
-" 自动添加注释头
+
+
+
+""""""""""""""""""""""""""""""""""""
+""""""""""" AddAuthor """"""""""""""
+""""""""""""""""""""""""""""""""""""
+"map <F4> ms:call AddAuthor()<cr>'S
+
 autocmd BufNewFile *.[ch],*.hpp,*.cpp exec ":call AddAuthor()"
 
 function AddAuthor()
@@ -255,17 +306,18 @@ function AddTitleForC()
     echohl WarningMsg | echo "Successful in adding the copyright." | echohl None
 endfunction
 
-" }}}
+
+
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-iab mer MMERR( "ERR:");<Left><Left><Left>
-iab der MMDEBUG( "ERR:");<Left><Left><Left>
-iab rer RETURN_ON_ERROR( logger, iRet, "", iRet );<Esc>11<Left>
-iab mlg MMBIZFuncLogHelper logger( __func__, );<Esc>2<Left>
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+iab mer MMERR("ERR:");<Left><Left><Left>
+iab der MMDEBUG("ERR:");<Left><Left><Left>
+iab rer RETURN_ON_ERROR(logger, iRet, "", iRet);<Esc>10<Left>
+iab mlg MMBIZFuncLogHelper logger(__func__,);<Esc>1<Left>
 iab irt int iRet = 0;<CR>return iRet;
 iab llg MMBIZFuncLogHelper& logger = MMBIZFuncLogHelper::LastObj();<CR>
-iab ber MMBIZERR( logger, "ERR: ret %d", iRet );<Esc>16<Left>
+iab ber MMBIZERR(logger, "ERR: ret %d", iRet);<Esc>15<Left>
 iab pu64 " PRIu64 "<Left><Esc>
-iab roe RETURN_ON_ERROR( logger, 0 != iRet, "", iRet );<Esc>11<Left>
-
+iab roe RETURN_ON_ERROR(logger, 0 != iRet, "", iRet);<Esc>10<Left>
